@@ -71,3 +71,31 @@
 读取数据可以使用LoadInt64()。最后sum的值是可以加到100，测试原子读出，将value设置为
 [1,99]则可以判断是否为原子读取。当然不用原子读取也是有几率num等于value，需多测几次。
 ```
+
+## 单例
+```
+type singleton struct {}
+
+var (
+    instance    *singleton
+    initialized uint32
+    mu          sync.Mutex
+)
+
+func Instance() *singleton {
+    if atomic.LoadUint32(&initialized) == 1 {
+        return instance
+    }
+
+    mu.Lock()
+    defer mu.Unlock()
+
+    if instance == nil {
+        defer atomic.StoreUint32(&initialized, 1)
+        instance = &singleton{}
+    }
+    return instance
+}
+
+引用Go语言高级编程中的例子
+```
