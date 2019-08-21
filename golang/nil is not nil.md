@@ -25,17 +25,16 @@ func main() {
 ```
 func main() {
 	a := (*interface{})(nil)
-	// *interface {} <nil>
 	fmt.Println(reflect.TypeOf(a), reflect.ValueOf(a))
-	var b interface{} = (*interface{})(nil)
 	// *interface {} <nil>
+	var b interface{} = (*interface{})(nil)
 	fmt.Println(reflect.TypeOf(b), reflect.ValueOf(b))
-	// true false
+	// *interface {} <nil>
+	
+	fmt.Println(a == b)
+	// true
 	fmt.Println(a == nil, b == nil)
+	// true false
 }
 ```
-***为什么类型值都相同结果却不同***
-
-## 解答
-***a等同为var a \*interface{} = nil***
-***b的值为nil,类型是\*interface{}***
+***a＝＝b 用的是他们的真实值，a的值就是nil，而变量b的值其实有两部分，一部分是dynamic type 一部分是dynamic value 它的value部分是nil但是type不是nil***
