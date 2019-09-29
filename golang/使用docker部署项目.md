@@ -31,21 +31,14 @@ docker run -p 33060(本地端口):3306(容器端口) -e MYSQL_ROOT_PASSWORD=root
 docker run --link mysql(容器名):mysql -p 3001:3001 --name testname test
 ```
 
-## 本地连接容器内，使用网络连接mysql
+## 远程连接mysql容器
 ```
-修改/etc/mysql/mysql.conf.d/mysqld.cnf中的bind_host
-改为0.0.0.0
-
-使用0.0.0.0:33060连接容器中的mysql
-或
-查看容器ip   ifconfig
-用容器ip连接容器中的mysql
-```
-
-## 使用容器连接另外容器中的mysql
-```
-构建容器...
-连接另外容器中的mysql
-查看容器ip
-使用docker0IP|mysql-dockerIP:33060即可连接
+进入容器: docker exec -it mysql /bin/bash
+连接mysql: mysql -u root -p
+查看信息: select host,user,plugin,authentication_string from mysql.user; 
+备注：host为 % 表示不限制ip localhost表示本机使用 plugin非mysql_native_password 则需要修改密码
+修改加密方式
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '123456';
+flush privileges; 
+连接mysql即可
 ```
